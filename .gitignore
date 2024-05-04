@@ -1,0 +1,14 @@
+*.cache
+*.class
+*.csv
+*.log
+*.html
+/.bsp
+/.idea
+/docs
+/project/project
+/project/target
+/releases
+/target
+.DS_Store
+!/src/test/resources/RFC4180Example.csv
