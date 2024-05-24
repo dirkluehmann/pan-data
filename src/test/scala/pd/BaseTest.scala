@@ -66,8 +66,8 @@ class BaseTest extends AnyFunSuite with Matchers with SequentialNestedSuiteExecu
   val s1B: Series[Double] = Series("B")(23.1, 1.4, 1.4, 7.0, 3.1)
   val s1C: Series[String] = Series("C")("ghi", "ABC", "XyZ", "qqq", "Uuu")
   val s1D: Series[C1] = Series("D")(C1("A", 5), C1("B", 1), C1("C", 2), C1("D", 2), C1("E", 0))
-  val series1: Seq[Series[Any]] = Seq(s1A, s1B, s1C, s1D).map(_.toAny)
-  val series1Sorted: Seq[Series[Any]] = Seq(s1A.sorted, s1B.sorted, s1C.sorted, s1D.sorted).map(_.toAny)
+  val series1: Seq[Series[Any]] = Seq(s1A, s1B, s1C, s1D).map(_.asAny)
+  val series1Sorted: Seq[Series[Any]] = Seq(s1A.sorted, s1B.sorted, s1C.sorted, s1D.sorted).map(_.asAny)
   val s1ASorted: Series[Int] = s1A.sorted
   val s1ASub: Series[Int] = s1A(Seq(0, 2, 3))
   val s1BSorted: Series[Double] = s1B.sorted
@@ -93,7 +93,7 @@ class BaseTest extends AnyFunSuite with Matchers with SequentialNestedSuiteExecu
   val s2C: Series[String] = Series("C")("ghi", "ABC", "XyZ", null, null)
   val s2COtherBase: Series[String] = Series("C")("ghi", "ABC", "XyZ")
   val s2D: Series[C1] = Series("D")(C1("A", 5), null, C1("C", 2), C1("D", 2), C1("E", 0))
-  val series2: Seq[Series[Any]] = Seq(s2A, s2B, s2C, s2D).map(_.toAny)
+  val series2: Seq[Series[Any]] = Seq(s2A, s2B, s2C, s2D).map(_.asAny)
 
   val maskA: Seq[Boolean] = Seq(true, true, false, true, true)
   val maskB: Seq[Boolean] = Seq(false, true, true, true, true)
@@ -103,12 +103,12 @@ class BaseTest extends AnyFunSuite with Matchers with SequentialNestedSuiteExecu
   val s1BSliced: Series[Double] = s1B(maskB)
   val s1CSliced: Series[String] = s1C(maskC)
   val s1DSliced: Series[C1] = s1D(maskD)
-  val series1Sliced: Seq[Series[Any]] = Seq(s1ASliced, s1BSliced, s1CSliced, s1DSliced).map(_.toAny)
+  val series1Sliced: Seq[Series[Any]] = Seq(s1ASliced, s1BSliced, s1CSliced, s1DSliced).map(_.asAny)
   val s2ASliced: Series[Int] = s2A(maskA)
   val s2BSliced: Series[Double] = s2B(maskB)
   val s2CSliced: Series[String] = s2C(maskC)
   val s2DSliced: Series[C1] = s2D(maskD)
-  val series2Sliced: Seq[Series[Any]] = Seq(s2ASliced, s2BSliced, s2CSliced, s2DSliced).map(_.toAny)
+  val series2Sliced: Seq[Series[Any]] = Seq(s2ASliced, s2BSliced, s2CSliced, s2DSliced).map(_.asAny)
 
   val df3: DataFrame = DataFrame(
     "A" -> Series(6, null, 2, 8, 4),

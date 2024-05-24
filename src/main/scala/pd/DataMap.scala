@@ -882,7 +882,7 @@ object DataMap:
         throw IllegalOperation(
           s"The group column '${aggregate.name}' cannot be used as a result column. Group columns: ${dm.groupCols.mkString(", ")}."
         )
-      Groups(dm, aggregates :+ aggregate.toAny)
+      Groups(dm, aggregates :+ aggregate.asAny)
 
     /**
       * Expands the aggregation onto the original index.

@@ -26,7 +26,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("plus")
-  def +(series: Series[?]): Series[Any] =
+  def +[T2](series: Series[T2]): Series[Any] =
     if isDouble then
       if series.isDouble then toAny(toD + asD(series))
       else if series.isInt then toAny(toD + asI(series))
@@ -58,7 +58,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("minus")
-  def -(series: Series[?]): Series[Any] =
+  def -[T2](series: Series[T2]): Series[Any] =
     if isDouble then
       if series.isDouble then toAny(toD - asD(series))
       else if series.isInt then toAny(toD - asI(series))
@@ -85,7 +85,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("times")
-  def *(series: Series[?]): Series[Any] =
+  def *[T2](series: Series[T2]): Series[Any] =
     if isDouble then
       if series.isDouble then toAny(toD * asD(series))
       else if series.isInt then toAny(toD * asI(series))
@@ -112,7 +112,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("div")
-  def /(series: Series[?]): Series[Any] =
+  def /[T2](series: Series[T2]): Series[Any] =
     if isDouble then
       if series.isDouble then toAny(toD / asD(series))
       else if series.isInt then toAny(toD / asI(series))
@@ -141,7 +141,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("smaller")
-  def <(series: Series[?]): Series[Boolean] =
+  def <[T2](series: Series[T2]): Series[Boolean] =
     if isDouble then
       if series.isDouble then toD < asD(series)
       else throw IllegalOperation(this, series, "<")
@@ -152,7 +152,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("smallerEqual")
-  def <=(series: Series[?]): Series[Boolean] =
+  def <=[T2](series: Series[T2]): Series[Boolean] =
     if isDouble then
       if series.isDouble then toD <= asD(series)
       else throw IllegalOperation(this, series, "<=")
@@ -163,7 +163,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("greaterEqual")
-  def >=(series: Series[?]): Series[Boolean] =
+  def >=[T2](series: Series[T2]): Series[Boolean] =
     if isDouble then
       if series.isDouble then toD >= asD(series)
       else throw IllegalOperation(this, series, ">=")
@@ -174,7 +174,7 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("greater")
-  def >(series: Series[?]): Series[Boolean] =
+  def >[T2](series: Series[T2]): Series[Boolean] =
     if isDouble then
       if series.isDouble then toD > asD(series)
       else throw IllegalOperation(this, series, ">")
@@ -260,18 +260,31 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
 
   /** @since 0.1.0 */
   @targetName("sum")
-  def sum: Any =
-    if isDouble then toD.sum
-    else if isInt then toI.sum
+  def sum: Double =
+    if isBoolean then toB.sum.toDouble
+    else if isDouble then toD.sum
+    else if isInt then toI.sum.toDouble
     else throw IllegalOperation(this, "sum")
 
-  /** @since 0.1.0 */
+  /**
+    * Converts to a Series of type Boolean.
+    *
+    * @throws SeriesCastException
+    *   If the conversion fails.
+    * @since 0.1.0
+    */
   def toBoolean: Series[Boolean] =
     if isBoolean then toB
     else if isString then toS.toBoolean
     else throw SeriesCastException(this, "Boolean")
 
-  /** @since 0.1.0 */
+  /**
+    * Converts to a Series of type Double.
+    *
+    * @throws SeriesCastException
+    *   If the conversion fails.
+    * @since 0.1.0
+    */
   def toDouble: Series[Double] =
     if isDouble then toD
     else if isInt then toI.toDouble
@@ -279,7 +292,13 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
     else if isBoolean then toB.toDouble
     else throw SeriesCastException(this, "Double")
 
-  /** @since 0.1.0 */
+  /**
+    * Converts to a Series of type Int.
+    *
+    * @throws SeriesCastException
+    *   If the conversion fails.
+    * @since 0.1.0
+    */
   def toInt: Series[Int] =
     if isInt then toI
     else if isString then toS.toInt
@@ -287,6 +306,8 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
     else throw SeriesCastException(this, "Int")
 
   /**
+    * Converts to a Series of type LocalDate.
+    *
     * @return
     *   Parsed LocalDate Series.
     * @throws java.time.format.DateTimeParseException
@@ -300,6 +321,8 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
     else map(v => LocalDate.parse(v.toString))
 
   /**
+    * Converts to a Series of type LocalDateTime.
+    *
     * @return
     *   Parsed LocalDateTime Series.
     * @throws java.time.format.DateTimeParseException
@@ -313,6 +336,8 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
     else map(v => LocalDateTime.parse(v.toString))
 
   /**
+    * Converts to a Series of type LocalTime.
+    *
     * @return
     *   Parsed LocalTime Series.
     * @throws java.time.format.DateTimeParseException
@@ -326,6 +351,8 @@ class SeriesAny private[pd] (data: SeriesData[Any], index: BaseIndex, name: Stri
     else map(v => LocalTime.parse(v.toString))
 
   /**
+    * Converts to a Series of type ZonedDateTime.
+    *
     * @return
     *   Parsed ZonedDateTime Series.
     * @throws java.time.format.DateTimeParseException

@@ -177,7 +177,8 @@ private[pd] abstract class SeriesOps:
   protected def fillSeries[T](s: Series[T], value: T): Series[T]
 
   /**
-   * Fills unset values of a Series ignoring the current index. The index is restored to uniform index.
+   * Fills unset values of a Series ignoring the current index assuming that the Series is dense.
+   * The index is restored to a uniform index.
    *
    * @param s
    *   Series.

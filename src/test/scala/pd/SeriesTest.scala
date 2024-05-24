@@ -329,12 +329,12 @@ class SeriesTest extends BaseTest:
   test("as[T2: Typeable: ClassTag]: Series[T2]") {
     val s1 = s1A.as[Int]
     s1A.get(0) shouldBe 6
-    val s2 = s1A.toAny.as[Int]
+    val s2 = s1A.asAny.as[Int]
     s2.get(0) shouldBe 6
     assertThrows[SeriesCastException](s1A.as[Double])
     assertThrows[SeriesCastException](s1A.as[String])
     assertThrows[SeriesCastException](s1B.as[Int])
-    assertThrows[SeriesCastException](s1B.toAny.as[Int])
+    assertThrows[SeriesCastException](s1B.asAny.as[Int])
 
   }
 
@@ -347,11 +347,11 @@ class SeriesTest extends BaseTest:
     val s = s2A.sorted
 
     s2A.as[Int](0).get shouldBe 6
-    s2A.toAny.as[Int](0).get shouldBe 6
+    s2A.asAny.as[Int](0).get shouldBe 6
     assertThrows[ClassCastException](s2A.as[Double](0).get)
     assertThrows[ClassCastException](s2A.as[Boolean](0).get)
     s1CSliced.as[String](1).get shouldBe "ABC"
-    s1CSliced.toAny.as[String](1).get shouldBe "ABC"
+    s1CSliced.asAny.as[String](1).get shouldBe "ABC"
     assertThrows[ClassCastException](s1CSliced.as[Int](1).get)
 
     assertThrows[IndexBoundsException](s2A.as[Int](-1))
@@ -383,11 +383,11 @@ class SeriesTest extends BaseTest:
     val s = s2A.sorted
 
     s2A.as[Int](Some(0)).get shouldBe 6
-    s2A.toAny.as[Int](Some(0)).get shouldBe 6
+    s2A.asAny.as[Int](Some(0)).get shouldBe 6
     assertThrows[ClassCastException](s2A.as[Double](Some(0)).get)
     assertThrows[ClassCastException](s2A.as[Boolean](Some(0)).get)
     s1CSliced.as[String](Some(1)).get shouldBe "ABC"
-    s1CSliced.toAny.as[String](Some(1)).get shouldBe "ABC"
+    s1CSliced.asAny.as[String](Some(1)).get shouldBe "ABC"
     assertThrows[ClassCastException](s1CSliced.as[Int](Some(1)).get)
 
     s2A.as[Int](None) shouldBe None
@@ -422,19 +422,19 @@ class SeriesTest extends BaseTest:
     val s = s2A.sorted
 
     s2A.as[Int](0, -1) shouldBe 6
-    s2A.toAny.as[Int](0, -1) shouldBe 6
+    s2A.asAny.as[Int](0, -1) shouldBe 6
     assertThrows[ClassCastException](s2A.as[Double](0, -1))
     assertThrows[ClassCastException](s2A.as[Boolean](0, true))
     s1CSliced.as[String](1, "default") shouldBe "ABC"
-    s1CSliced.toAny.as[String](1, "default") shouldBe "ABC"
+    s1CSliced.asAny.as[String](1, "default") shouldBe "ABC"
     assertThrows[ClassCastException](s1CSliced.as[Int](1, -1))
 
     s2A.as(0, -1) shouldBe 6
-    s2A.toAny.as(0, -1) shouldBe 6
+    s2A.asAny.as(0, -1) shouldBe 6
     assertThrows[ClassCastException](s2A.as(0, -1.0))
     assertThrows[ClassCastException](s2A.as(0, true))
     s1CSliced.as(1, "default") shouldBe "ABC"
-    s1CSliced.toAny.as(1, "default") shouldBe "ABC"
+    s1CSliced.asAny.as(1, "default") shouldBe "ABC"
     assertThrows[ClassCastException](s1CSliced.as(1, -1))
 
     assertThrows[IndexBoundsException](s2A.as[Int](-1, 10))
@@ -466,19 +466,19 @@ class SeriesTest extends BaseTest:
     val s = s2A.sorted
 
     s2A.as[Int](Some(0), -1) shouldBe 6
-    s2A.toAny.as[Int](Some(0), -1) shouldBe 6
+    s2A.asAny.as[Int](Some(0), -1) shouldBe 6
     assertThrows[ClassCastException](s2A.as[Double](Some(0), -1.0))
     assertThrows[ClassCastException](s2A.as[Boolean](Some(0), false))
     s1CSliced.as[String](Some(1), "default") shouldBe "ABC"
-    s1CSliced.toAny.as[String](Some(1), "default") shouldBe "ABC"
+    s1CSliced.asAny.as[String](Some(1), "default") shouldBe "ABC"
     assertThrows[ClassCastException](s1CSliced.as[Int](Some(1), -1))
 
     s2A.as(Some(0), -1) shouldBe 6
-    s2A.toAny.as(Some(0), -1) shouldBe 6
+    s2A.asAny.as(Some(0), -1) shouldBe 6
     assertThrows[ClassCastException](s2A.as(Some(0), -1.0))
     assertThrows[ClassCastException](s2A.as(Some(0), false))
     s1CSliced.as(Some(1), "default") shouldBe "ABC"
-    s1CSliced.toAny.as(Some(1), "default") shouldBe "ABC"
+    s1CSliced.asAny.as(Some(1), "default") shouldBe "ABC"
     assertThrows[ClassCastException](s1CSliced.as(Some(1), -1))
 
     s2A.as[Int](None, 10) shouldBe 10
@@ -703,14 +703,14 @@ class SeriesTest extends BaseTest:
     s2CSliced.fill(s2CSliced) shouldBe s2CSliced
     s2DSliced.fill(s2DSliced) shouldBe s2DSliced
 
-    s2A.toAny.fill(s1A) shouldBe s1A
-    s2B.toAny.fill(s1B) shouldBe s1B
-    s2A.toAny.fill(s1A.toAny) shouldBe s1A
-    s2B.toAny.fill(s1B.toAny) shouldBe s1B
+    s2A.asAny.fill(s1A) shouldBe s1A
+    s2B.asAny.fill(s1B) shouldBe s1B
+    s2A.asAny.fill(s1A.asAny) shouldBe s1A
+    s2B.asAny.fill(s1B.asAny) shouldBe s1B
 
-    assertThrows[SeriesCastException](s2A.toAny.fill(s1B))
-    assertThrows[SeriesCastException](s2B.toAny.fill(s1C))
-    s2D.toAny.fill(s1DOfC2) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
+    assertThrows[SeriesCastException](s2A.asAny.fill(s1B))
+    assertThrows[SeriesCastException](s2B.asAny.fill(s1C))
+    s2D.asAny.fill(s1DOfC2) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
   }
 
   test("fill(value: T): Series[T]") {
@@ -723,15 +723,15 @@ class SeriesTest extends BaseTest:
     s2CSliced.fill("value") shouldBe s2CSliced
     s2DSliced.fill(C1("B", 1)) shouldBe s2DSliced
 
-    s2A.toAny.fill(2) shouldBe s1A
-    s2B.toAny.fill(23.1) shouldBe s1B
-    s2C.toAny.fill("value") shouldBe Series("C")("ghi", "ABC", "XyZ", "value", "value")
-    s2D.toAny.fill(C1("B", 1)) shouldBe s1D
+    s2A.asAny.fill(2) shouldBe s1A
+    s2B.asAny.fill(23.1) shouldBe s1B
+    s2C.asAny.fill("value") shouldBe Series("C")("ghi", "ABC", "XyZ", "value", "value")
+    s2D.asAny.fill(C1("B", 1)) shouldBe s1D
 
     s2B.fill(23) shouldBe Series("B")(23.0, 1.4, 1.4, 7.0, 3.1)
-    assertThrows[ValueCastException](s2A.toAny.fill(2.0))
-    assertThrows[ValueCastException](s2B.toAny.fill("23"))
-    s2D.toAny.fill(C2()) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
+    assertThrows[ValueCastException](s2A.asAny.fill(2.0))
+    assertThrows[ValueCastException](s2B.asAny.fill("23"))
+    s2D.asAny.fill(C2()) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
   }
 
   test("fillAll[T2 <: T](series: Series[T2]): Series[T]") {
@@ -747,15 +747,19 @@ class SeriesTest extends BaseTest:
     s2BSliced.fillAll(s2BSliced) shouldBe s2B
     s2CSliced.fillAll(s2CSliced) shouldBe s2C
     s2DSliced.fillAll(s2DSliced) shouldBe s2D
+    s1A(Seq()).fillAll(s1A) shouldBe s1A
+    s1A(Seq()).fillAll(Series(1, 1, 1, 1, 1)) shouldBe Series("A")(1, 1, 1, 1, 1)
+    s2C(Seq()).fillAll(s2C) shouldBe s2C
+    s2ASliced.fillAll(Series("A")(1, 1, 1, 1, 1)) shouldBe Series("A")(6, 3, 1, 8, 4)
 
-    s2A.toAny.fillAll(s1A) shouldBe s1A
-    s2B.toAny.fillAll(s1B) shouldBe s1B
-    s2A.toAny.fillAll(s1A.toAny) shouldBe s1A
-    s2B.toAny.fillAll(s1B.toAny) shouldBe s1B
+    s2A.asAny.fillAll(s1A) shouldBe s1A
+    s2B.asAny.fillAll(s1B) shouldBe s1B
+    s2A.asAny.fillAll(s1A.asAny) shouldBe s1A
+    s2B.asAny.fillAll(s1B.asAny) shouldBe s1B
 
-    assertThrows[SeriesCastException](s2A.toAny.fillAll(s1B))
-    assertThrows[SeriesCastException](s2B.toAny.fillAll(s1C))
-    s2D.toAny.fillAll(s1DOfC2) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
+    assertThrows[SeriesCastException](s2A.asAny.fillAll(s1B))
+    assertThrows[SeriesCastException](s2B.asAny.fillAll(s1C))
+    s2D.asAny.fillAll(s1DOfC2) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
   }
 
   test("fillAll(value: T): Series[T]") {
@@ -767,16 +771,18 @@ class SeriesTest extends BaseTest:
     s2BSliced.fillAll(23.1) shouldBe s1B
     s2CSliced.fillAll("value") shouldBe Series("C")("ghi", "ABC", "XyZ", "value", "value")
     s2DSliced.fillAll(C1("B", 1)) shouldBe s1D
+    s1A(Seq()).fillAll(1) shouldBe Series("A")(1, 1, 1, 1, 1)
+    s2C(Seq()).fillAll("x") shouldBe Series("C")("x", "x", "x", "x", "x")
 
-    s2A.toAny.fillAll(2) shouldBe s1A
-    s2B.toAny.fillAll(23.1) shouldBe s1B
-    s2CSliced.toAny.fillAll("value") shouldBe Series("C")("ghi", "ABC", "XyZ", "value", "value")
-    s2DSliced.toAny.fillAll(C1("B", 1)) shouldBe s1D
+    s2A.asAny.fillAll(2) shouldBe s1A
+    s2B.asAny.fillAll(23.1) shouldBe s1B
+    s2CSliced.asAny.fillAll("value") shouldBe Series("C")("ghi", "ABC", "XyZ", "value", "value")
+    s2DSliced.asAny.fillAll(C1("B", 1)) shouldBe s1D
 
     s2B.fillAll(23) shouldBe Series("B")(23.0, 1.4, 1.4, 7.0, 3.1)
-    assertThrows[ValueCastException](s2A.toAny.fillAll(2.0))
-    assertThrows[ValueCastException](s2B.toAny.fillAll("23"))
-    s2DSliced.toAny.fillAll(C2()) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
+    assertThrows[ValueCastException](s2A.asAny.fillAll(2.0))
+    assertThrows[ValueCastException](s2B.asAny.fillAll("23"))
+    s2DSliced.asAny.fillAll(C2()) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
   }
 
   test("first: Option[Int]") {
@@ -2057,14 +2063,14 @@ class SeriesTest extends BaseTest:
     s2CSliced.orElse(s2CSliced) shouldBe s2CSliced
     s2DSliced.orElse(s2DSliced) shouldBe s2DSliced
 
-    s2A.toAny.orElse(s1A) shouldBe s1A
-    s2B.toAny.orElse(s1B) shouldBe s1B
-    s2A.toAny.orElse(s1A.toAny) shouldBe s1A
-    s2B.toAny.orElse(s1B.toAny) shouldBe s1B
+    s2A.asAny.orElse(s1A) shouldBe s1A
+    s2B.asAny.orElse(s1B) shouldBe s1B
+    s2A.asAny.orElse(s1A.asAny) shouldBe s1A
+    s2B.asAny.orElse(s1B.asAny) shouldBe s1B
 
-    assertThrows[SeriesCastException](s2A.toAny.orElse(s1B))
-    assertThrows[SeriesCastException](s2B.toAny.orElse(s1C))
-    s2D.toAny.orElse(s1DOfC2) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
+    assertThrows[SeriesCastException](s2A.asAny.orElse(s1B))
+    assertThrows[SeriesCastException](s2B.asAny.orElse(s1C))
+    s2D.asAny.orElse(s1DOfC2) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
   }
 
   test("orElse(value: T): Series[T]") {
@@ -2078,15 +2084,15 @@ class SeriesTest extends BaseTest:
     s2CSliced.orElse("value") shouldBe s2CSliced
     s2DSliced.orElse(C1("B", 1)) shouldBe s2DSliced
 
-    s2A.toAny.orElse(2) shouldBe s1A
-    s2B.toAny.orElse(23.1) shouldBe s1B
-    s2C.toAny.orElse("value") shouldBe Series("C")("ghi", "ABC", "XyZ", "value", "value")
-    s2D.toAny.orElse(C1("B", 1)) shouldBe s1D
+    s2A.asAny.orElse(2) shouldBe s1A
+    s2B.asAny.orElse(23.1) shouldBe s1B
+    s2C.asAny.orElse("value") shouldBe Series("C")("ghi", "ABC", "XyZ", "value", "value")
+    s2D.asAny.orElse(C1("B", 1)) shouldBe s1D
 
     s2B.orElse(23) shouldBe Series("B")(23.0, 1.4, 1.4, 7.0, 3.1)
-    assertThrows[ValueCastException](s2A.toAny.orElse(2.0))
-    assertThrows[ValueCastException](s2B.toAny.orElse("23"))
-    s2D.toAny.orElse(C2()) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
+    assertThrows[ValueCastException](s2A.asAny.orElse(2.0))
+    assertThrows[ValueCastException](s2B.asAny.orElse("23"))
+    s2D.asAny.orElse(C2()) shouldBe Series("D")(C1("A", 5), C2(), C1("C", 2), C1("D", 2), C1("E", 0))
   }
 
   test("resetIndex: Series[T]") {
@@ -2224,14 +2230,14 @@ class SeriesTest extends BaseTest:
   }
 
   test("toAny: Series[Any]") {
-    s1A.toAny shouldBe s1A
-    s1B.toAny shouldBe s1B
-    s2C.toAny shouldBe s2C
-    s2D.toAny shouldBe s2D
-    s1ASliced.toAny shouldBe s1ASliced
-    s1BSliced.toAny shouldBe s1BSliced
-    s2CSliced.toAny shouldBe s2CSliced
-    s2DSliced.toAny shouldBe s2DSliced
+    s1A.asAny shouldBe s1A
+    s1B.asAny shouldBe s1B
+    s2C.asAny shouldBe s2C
+    s2D.asAny shouldBe s2D
+    s1ASliced.asAny shouldBe s1ASliced
+    s1BSliced.asAny shouldBe s1BSliced
+    s2CSliced.asAny shouldBe s2CSliced
+    s2DSliced.asAny shouldBe s2DSliced
   }
 
   test("toArray: Array[Option[T]]") {
@@ -2381,7 +2387,7 @@ class SeriesTest extends BaseTest:
 
   test("typeString: String") {
     s1A.typeString shouldBe "Int"
-    s1A.toAny.typeString shouldBe "Int"
+    s1A.asAny.typeString shouldBe "Int"
     s1B.typeString shouldBe "Double"
     s1C.typeString shouldBe "String"
     s1D.typeString shouldBe "C1"
@@ -2412,8 +2418,8 @@ class SeriesTest extends BaseTest:
       C2(),
       C2(),
     )
-    assertThrows[SeriesCastException](s1A.toAny.union(s1B.toAny))
-    assertThrows[SeriesCastException](s1DOfC2.toAny.union(s1D))
+    assertThrows[SeriesCastException](s1A.asAny.union(s1B.asAny))
+    assertThrows[SeriesCastException](s1DOfC2.asAny.union(s1D))
   }
 
   test("unique: Series[T]") {
@@ -2474,13 +2480,13 @@ class SeriesTest extends BaseTest:
     s2D.update(Series(C1("A", 0), C1("A", 0), C1("Z", 9), C1("A", 0), C1("A", 0)).apply(Seq(2))) shouldBe
       Series("D")(C1("A", 5), null, C1("Z", 9), C1("D", 2), C1("E", 0))
 
-    s2A.toAny.update(s1A) shouldBe s1A
-    s2B.toAny.update(s1B) shouldBe s1B
-    s2C.toAny.update(s1C.toAny) shouldBe s1C
-    s2D.toAny.update(s1DOfC2) shouldBe s1DOfC2
+    s2A.asAny.update(s1A) shouldBe s1A
+    s2B.asAny.update(s1B) shouldBe s1B
+    s2C.asAny.update(s1C.asAny) shouldBe s1C
+    s2D.asAny.update(s1DOfC2) shouldBe s1DOfC2
 
-    assertThrows[SeriesCastException](s2A.toAny.update(s1B))
-    assertThrows[SeriesCastException](s2B.toAny.update(s1C))
+    assertThrows[SeriesCastException](s2A.asAny.update(s1B))
+    assertThrows[SeriesCastException](s2B.asAny.update(s1C))
   }
 
   test("extract(indices: Array[Int]): Series[T]") {
@@ -2596,28 +2602,28 @@ class SeriesTest extends BaseTest:
     s1D.typeEquals(s2CSliced) shouldBe false
     s1D.typeEquals(s2DSliced) shouldBe true
 
-    s1A.toAny.typeEquals(s1A) shouldBe true
-    s1A.toAny.typeEquals(s1B) shouldBe false
-    s1A.toAny.typeEquals(s1C) shouldBe false
-    s1A.toAny.typeEquals(s1D) shouldBe false
-    s1B.typeEquals(s2A.toAny) shouldBe false
-    s1B.typeEquals(s2B.toAny) shouldBe true
-    s1B.typeEquals(s2C.toAny) shouldBe false
-    s1B.typeEquals(s2D.toAny) shouldBe false
-    s1C.toAny.typeEquals(s1ASliced.toAny) shouldBe false
-    s1C.toAny.typeEquals(s1BSliced.toAny) shouldBe false
-    s1C.toAny.typeEquals(s1CSliced.toAny) shouldBe true
-    s1C.toAny.typeEquals(s1DSliced.toAny) shouldBe false
+    s1A.asAny.typeEquals(s1A) shouldBe true
+    s1A.asAny.typeEquals(s1B) shouldBe false
+    s1A.asAny.typeEquals(s1C) shouldBe false
+    s1A.asAny.typeEquals(s1D) shouldBe false
+    s1B.typeEquals(s2A.asAny) shouldBe false
+    s1B.typeEquals(s2B.asAny) shouldBe true
+    s1B.typeEquals(s2C.asAny) shouldBe false
+    s1B.typeEquals(s2D.asAny) shouldBe false
+    s1C.asAny.typeEquals(s1ASliced.asAny) shouldBe false
+    s1C.asAny.typeEquals(s1BSliced.asAny) shouldBe false
+    s1C.asAny.typeEquals(s1CSliced.asAny) shouldBe true
+    s1C.asAny.typeEquals(s1DSliced.asAny) shouldBe false
 
     val s1DC2: Series[C2] = Series("No Name")(C2(), C2(), C2(), C2(), C2())
     s1D.typeEquals(s1DC2) shouldBe false
     s1DC2.typeEquals(s1D) shouldBe false
-    s1D.toAny.typeEquals(s1DC2) shouldBe false
-    s1DC2.toAny.typeEquals(s1D) shouldBe false
-    s1D.typeEquals(s1DC2.toAny) shouldBe false
-    s1DC2.typeEquals(s1D.toAny) shouldBe false
-    s1D.toAny.typeEquals(s1DC2.toAny) shouldBe false
-    s1DC2.toAny.typeEquals(s1D.toAny) shouldBe false
+    s1D.asAny.typeEquals(s1DC2) shouldBe false
+    s1DC2.asAny.typeEquals(s1D) shouldBe false
+    s1D.typeEquals(s1DC2.asAny) shouldBe false
+    s1DC2.typeEquals(s1D.asAny) shouldBe false
+    s1D.asAny.typeEquals(s1DC2.asAny) shouldBe false
+    s1DC2.asAny.typeEquals(s1D.asAny) shouldBe false
   }
 
   test("typeMatch[T2](series: Series[T2]): Boolean") {
@@ -2638,28 +2644,28 @@ class SeriesTest extends BaseTest:
     s1D.typeMatch(s2CSliced) shouldBe false
     s1D.typeMatch(s2DSliced) shouldBe true
 
-    s1A.toAny.typeMatch(s1A) shouldBe true
-    s1A.toAny.typeMatch(s1B) shouldBe false
-    s1A.toAny.typeMatch(s1C) shouldBe false
-    s1A.toAny.typeMatch(s1D) shouldBe false
-    s1B.typeMatch(s2A.toAny) shouldBe false
-    s1B.typeMatch(s2B.toAny) shouldBe true
-    s1B.typeMatch(s2C.toAny) shouldBe false
-    s1B.typeMatch(s2D.toAny) shouldBe false
-    s1C.toAny.typeMatch(s1ASliced.toAny) shouldBe false
-    s1C.toAny.typeMatch(s1BSliced.toAny) shouldBe false
-    s1C.toAny.typeMatch(s1CSliced.toAny) shouldBe true
-    s1C.toAny.typeMatch(s1DSliced.toAny) shouldBe false
+    s1A.asAny.typeMatch(s1A) shouldBe true
+    s1A.asAny.typeMatch(s1B) shouldBe false
+    s1A.asAny.typeMatch(s1C) shouldBe false
+    s1A.asAny.typeMatch(s1D) shouldBe false
+    s1B.typeMatch(s2A.asAny) shouldBe false
+    s1B.typeMatch(s2B.asAny) shouldBe true
+    s1B.typeMatch(s2C.asAny) shouldBe false
+    s1B.typeMatch(s2D.asAny) shouldBe false
+    s1C.asAny.typeMatch(s1ASliced.asAny) shouldBe false
+    s1C.asAny.typeMatch(s1BSliced.asAny) shouldBe false
+    s1C.asAny.typeMatch(s1CSliced.asAny) shouldBe true
+    s1C.asAny.typeMatch(s1DSliced.asAny) shouldBe false
 
     val s1DC2: Series[C2] = Series("No Name")(C2(), C2(), C2(), C2(), C2())
     s1D.typeMatch(s1DC2) shouldBe true
     s1DC2.typeMatch(s1D) shouldBe false
-    s1D.toAny.typeMatch(s1DC2) shouldBe true
-    s1DC2.toAny.typeMatch(s1D) shouldBe false
-    s1D.typeMatch(s1DC2.toAny) shouldBe true
-    s1DC2.typeMatch(s1D.toAny) shouldBe false
-    s1D.toAny.typeMatch(s1DC2.toAny) shouldBe true
-    s1DC2.toAny.typeMatch(s1D.toAny) shouldBe false
+    s1D.asAny.typeMatch(s1DC2) shouldBe true
+    s1DC2.asAny.typeMatch(s1D) shouldBe false
+    s1D.typeMatch(s1DC2.asAny) shouldBe true
+    s1DC2.typeMatch(s1D.asAny) shouldBe false
+    s1D.asAny.typeMatch(s1DC2.asAny) shouldBe true
+    s1DC2.asAny.typeMatch(s1D.asAny) shouldBe false
   }
 
   test("typeMatch[T2](value: T2): Boolean") {
@@ -2680,32 +2686,32 @@ class SeriesTest extends BaseTest:
     s1D.typeMatch("name") shouldBe false
     s1D.typeMatch(C1("A", 1)) shouldBe true
 
-    s1A.toAny.typeMatch(1) shouldBe true
-    s1A.toAny.typeMatch(2.0) shouldBe false
-    s1A.toAny.typeMatch("name") shouldBe false
-    s1A.toAny.typeMatch(C1("A", 1)) shouldBe false
-    s1B.toAny.typeMatch(1) shouldBe false
-    s1B.toAny.typeMatch(2.0) shouldBe true
-    s1B.toAny.typeMatch("name") shouldBe false
-    s1B.toAny.typeMatch(C1("A", 1)) shouldBe false
-    s1C.toAny.typeMatch(1) shouldBe false
-    s1C.toAny.typeMatch(2.0) shouldBe false
-    s1C.toAny.typeMatch("name") shouldBe true
-    s1C.toAny.typeMatch(C1("A", 1)) shouldBe false
-    s1D.toAny.typeMatch(1) shouldBe false
-    s1D.toAny.typeMatch(2.0) shouldBe false
-    s1D.toAny.typeMatch("name") shouldBe false
-    s1D.toAny.typeMatch(C1("A", 1)) shouldBe true
+    s1A.asAny.typeMatch(1) shouldBe true
+    s1A.asAny.typeMatch(2.0) shouldBe false
+    s1A.asAny.typeMatch("name") shouldBe false
+    s1A.asAny.typeMatch(C1("A", 1)) shouldBe false
+    s1B.asAny.typeMatch(1) shouldBe false
+    s1B.asAny.typeMatch(2.0) shouldBe true
+    s1B.asAny.typeMatch("name") shouldBe false
+    s1B.asAny.typeMatch(C1("A", 1)) shouldBe false
+    s1C.asAny.typeMatch(1) shouldBe false
+    s1C.asAny.typeMatch(2.0) shouldBe false
+    s1C.asAny.typeMatch("name") shouldBe true
+    s1C.asAny.typeMatch(C1("A", 1)) shouldBe false
+    s1D.asAny.typeMatch(1) shouldBe false
+    s1D.asAny.typeMatch(2.0) shouldBe false
+    s1D.asAny.typeMatch("name") shouldBe false
+    s1D.asAny.typeMatch(C1("A", 1)) shouldBe true
 
     val s1DC2: Series[C2] = Series("No Name")(C2(), C2(), C2(), C2(), C2())
     s1D.typeMatch(C2()) shouldBe true
     s1DC2.typeMatch(C1("A", 0)) shouldBe false
-    s1D.toAny.typeMatch(C2()) shouldBe true
-    s1DC2.toAny.typeMatch(C1("A", 0)) shouldBe false
+    s1D.asAny.typeMatch(C2()) shouldBe true
+    s1DC2.asAny.typeMatch(C1("A", 0)) shouldBe false
     s1D.typeMatch(C2().asInstanceOf[Any]) shouldBe true
     s1DC2.typeMatch(C1("A", 0).asInstanceOf[Any]) shouldBe false
-    s1D.toAny.typeMatch(C2().asInstanceOf[Any]) shouldBe true
-    s1DC2.toAny.typeMatch(C1("A", 0).asInstanceOf[Any]) shouldBe false
+    s1D.asAny.typeMatch(C2().asInstanceOf[Any]) shouldBe true
+    s1DC2.asAny.typeMatch(C1("A", 0).asInstanceOf[Any]) shouldBe false
   }
 
   test("undefinedIndices: SeqIndex") {
@@ -3005,8 +3011,8 @@ class SeriesTest extends BaseTest:
       C2(),
     )
     s1A.union() shouldBe s1A
-    assertThrows[SeriesCastException](s1A.toAny.union(s1B.toAny))
-    assertThrows[SeriesCastException](s1DOfC2.toAny.union(s1D))
+    assertThrows[SeriesCastException](s1A.asAny.union(s1B.asAny))
+    assertThrows[SeriesCastException](s1DOfC2.asAny.union(s1D))
     assertThrows[IllegalOperation](Series.union())
   }
 

@@ -1367,8 +1367,7 @@ class MutableSeries[T] private[pd] (private[pd] var inner: Series[T]) extends In
     *   Type name such as "Int", "MyClass", "Any", "Array[Double]", "List", "Seq", etc.
     * @note
     *   - There is no deep type reflection for 2nd order types except for `Array`.
-    *   - When casting a Series to Any (via [[pd.implicits.SeriesAny.toAny]]), the internal type of the Series does not
-    *     change.
+    *   - When casting a Series to Any (via [[Series.asAny]]), the internal type of the Series does not change.
     * @since 0.1.0
     */
   def typeString: String = inner.typeString
@@ -1392,6 +1391,7 @@ class MutableSeries[T] private[pd] (private[pd] var inner: Series[T]) extends In
   * @since 0.1.0
   */
 object MutableSeries:
+  implicit def toMutableSeriesAny(s: MutableSeries[Any]): MutableSeriesAny = MutableSeriesAny(s)
   implicit def toMutableSeriesBoolean(s: MutableSeries[Boolean]): MutableSeriesBoolean = MutableSeriesBoolean(s)
   implicit def toMutableSeriesDouble(s: MutableSeries[Double]): MutableSeriesDouble = MutableSeriesDouble(s)
   implicit def toMutableSeriesInt(s: MutableSeries[Int]): MutableSeriesInt = MutableSeriesInt(s)

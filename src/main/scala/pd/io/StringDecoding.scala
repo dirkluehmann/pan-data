@@ -45,7 +45,7 @@ object StringDecoding:
       if attempt.isSuccess then
         result = attempt.get
         converted = true
-    result.toAny
+    result.asAny
 
   /**
     * Default decoders (order defines priority).

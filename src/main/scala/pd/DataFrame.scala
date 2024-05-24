@@ -230,7 +230,7 @@ class DataFrame protected (
   @targetName("updateOperator")
   def &[T](series: Series[T]): DataFrame =
     if contains(series.name) then
-      if index.eq(series.index) || index.includes(series.index) != -1 then |(apply(series.name).update(series.toAny))
+      if index.eq(series.index) || index.includes(series.index) != -1 then |(apply(series.name).update(series.asAny))
       else throw MergeIndexException(series)
     else |(series)
 

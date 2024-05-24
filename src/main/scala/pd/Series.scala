@@ -28,12 +28,11 @@ import scala.reflect.{ClassTag, TypeTest, Typeable, classTag}
   * A Series is a column of data. It has an index and may have undefined (missing) values.
   *
   * @see
-  *   - Creating a Series [[https://pan-data.org/scala/basics/creating-a-series.html]]
-  *   - Working with Series [[https://pan-data.org/scala/basics/working-with-series.html]]
-  *   - Custom Series Operations [[https://pan-data.org/scala/basics/custom-series-operations.html]]
-  *   - Index Operations [[https://pan-data.org/scala/basics/index-operations.html]]
-  *   - Mutable Access [[https://pan-data.org/scala/basics/muteable-access.html]]
-  *   - Sorting [[https://pan-data.org/scala/operations/sorting.html]]
+  *   - <a href="https://pan-data.org/scala/basics/creating-a-series.html">Creating a Series</a>
+  *   - <a href="https://pan-data.org/scala/basics/working-with-series.html">Working with Series </a>
+  *   - <a href="https://pan-data.org/scala/basics/custom-series-operations.html">Custom Series Operations</a>
+  *   - <a href="https://pan-data.org/scala/basics/index-operations.html">Index Operations</a>
+  *   - <a href="https://pan-data.org/scala/basics/muteable.html">Mutable Access</a>
   * @since 0.1.0
   */
 class Series[T] private[pd] (
@@ -525,6 +524,17 @@ class Series[T] private[pd] (
     else default
 
   /**
+    * Series as instance of `Series[Any]`.
+    *
+    * @return
+    *   Series of type Any.
+    * @note
+    *   Only the outer type of the Series is altered.
+    * @since 0.1.0
+    */
+  def asAny: Series[Any] = asInstanceOf[Series[Any]]
+
+  /**
     * Counts the number of defined (non-null) elements. For Double Series, also [[Double.NaN]] is accounted as not
     * defined.
     *
@@ -727,7 +737,7 @@ class Series[T] private[pd] (
     */
   def fillAll(value: T): Series[T] =
     requireTypeMatch(value)
-    ops.fillAll[T](this, value)
+    ops.fillAll[T](dense, value)
 
   /**
     * Returns the index position of the first defined (non-null) value and for boolean Series the first occurrence of
@@ -798,7 +808,7 @@ class Series[T] private[pd] (
     else apply(series.first(value))
 
   /**
-    * Returns the value at the index position, where a value occurs the first time in another Series or None if the
+    * Returns the value at the index position, where a value occurs the first time in another Series or `default` if the
     * value is not found.
     *
     * @param series
@@ -1193,8 +1203,8 @@ class Series[T] private[pd] (
     else apply(series.last(value))
 
   /**
-    * Returns the value at the index position, where a value occurs the last time in another Series or None if the value
-    * is not found.
+    * Returns the value at the index position, where a value occurs the last time in another Series or `default` if the
+    * value is not found.
     *
     * @param series
     *   Series which is searched for the value.
@@ -1429,17 +1439,6 @@ class Series[T] private[pd] (
     else map(_.toString)
 
   /**
-    * Series as instance of `Series[Any]`.
-    *
-    * @return
-    *   Series of type Any.
-    * @note
-    *   Only the outer type of the Series is altered.
-    * @since 0.1.0
-    */
-  def toAny: Series[Any] = asInstanceOf[Series[Any]]
-
-  /**
     * Copies the Series into an array.
     *
     * @return
@@ -1533,7 +1532,7 @@ class Series[T] private[pd] (
     *   Type name such as "Int", "MyClass", "Any", "Array[Double]", "List", "Seq", etc.
     * @note
     *   - There is no deep type reflection for 2nd order types except for `Array`.
-    *   - When casting a Series to Any (via [[toAny]]), the internal type of the Series does not change.
+    *   - When casting a Series to Any (via [[Series.asAny]]), the internal type of the Series does not change.
     * @since 0.1.0
     */
   def typeString: String = data.typeString()
@@ -1643,7 +1642,21 @@ class Series[T] private[pd] (
     */
   private[pd] inline def isString: Boolean = data.vector.isInstanceOf[Array[String]]
 
-  private[pd] def javaGet(ix: Int): T = get(ix)
+  private[pd] def javaApply(ix: Integer, default: T): T = if ix == null then default else apply(ix, default)
+
+  private[pd] def javaApply(ix: Option[Integer], default: T): T = if ix.isEmpty then default else apply(ix.get, default)
+
+  private[pd] def javaGet(ix: Integer): T | Null =
+    if ix == null then null
+    else if index.contains(ix) then
+      if data.getMask(ix) then data.get(ix)
+      else null
+    else null
+
+  private[pd] def javaMapToT(f: T => T): Series[T] = ops.map(this, f)(ClassTag(data.vectorClass))
+
+  private[pd] def javaMapToT(series: Series[T], f: (T, T) => T): Series[T] =
+    ops.map(this, series, f)(ClassTag(data.vectorClass))
 
   /**
     * SeriesOps object for processing data. Multi-threading support is added for more than [[Settings.minThreadedRows]]

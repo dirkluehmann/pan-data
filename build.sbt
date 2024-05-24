@@ -7,8 +7,7 @@
  */
 
 name := "pan-data"
-ThisBuild / version := "0.0.1"
-ThisBuild / versionScheme := Some("semver-spec")
+ThisBuild / version := "0.0.2"
 
 organization := "org.pan-data"
 homepage := Some(url("https://pan-data.org"))
